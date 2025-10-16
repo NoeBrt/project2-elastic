@@ -1563,6 +1563,10 @@ Visualisez le dashboard regroupant les visualisation ici :
 
 http://localhost:5601/app/r/s/6ns45
 
+![alt text](image-41.png)
+![alt text](image-42.png)
+![alt text](image-43.png)
+
 ## Visualisation with MAP
 
 ### Nombre de document par zipcode en fonction du type de cuisine
@@ -1572,6 +1576,10 @@ http://localhost:5601/app/r/s/6ns45
 ### Cluster des inspection par Voisinage
 
 ![alt text](image-35.png)
+
+### restaurant par voisinage
+
+![alt text](image-40.png)
 
 
 ### Heatmap of Unique Restaurant
