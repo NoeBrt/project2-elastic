@@ -193,9 +193,8 @@ Manahattan possède 12113 restaurant, faisant de ce quartier celui avec la plus 
 
 #### visualitation
 
-Reprendre la visualisation précédente en y ajoutant un label permet de se faire une idée approximative du nombre de restaurants par quartier, mais cela manque de lisibilité.
+Reprendre la visualisation précédente ne permet pas de visualisé clairement quel restaurant a le plus grand nombre de restaurant, l'outil de cluster ne permet pas d'utiliser le nombre de restaurant exact tout en coloarant les clusters par quartier.
 
-![Carte de restaurant de New York par Clusters de quartier](image-2.png)
 
 Comme sur la heatmap, on remarque une plus grande densité à Manhattan, mais cela reste moins évident qu’avec un barchart.
 On utilise donc un unique count sur CAMIS afin de ne compter que les restaurants uniques.
