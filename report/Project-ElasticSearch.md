@@ -340,8 +340,173 @@ response :
       },...
 ```
 
-requète avec tri :
+requète avec aggregation par id unique de restaurant "CAMIS" :
 
+```
+GET restaurantny-final/_search
+{
+  "size": 0,
+  "query": {
+    "term": {
+      "GRADE": "A"
+    }
+  },
+  "aggs": {
+    "unique_restaurants": {
+      "terms": {
+        "field": "CAMIS",
+        "size": 10000
+      },
+      "aggs": {
+        "sample": {
+          "top_hits": {
+            "size": 1,
+            "_source": ["DBA", "BUILDING", "STREET", "ZIPCODE", "BORO", "GRADE"]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+reponse :
+```
+{
+  "took": 593,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": []
+  },
+  "aggregations": {
+    "unique_restaurants": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 33532,
+      "buckets": [
+        {
+          "key": 40809390,
+          "doc_count": 17,
+          "sample": {
+            "hits": {
+              "total": {
+                "value": 17,
+                "relation": "eq"
+              },
+              "max_score": 0.3891273,
+              "hits": [
+                {
+                  "_index": "restaurantny-final",
+                  "_id": "yD5M8pkBQqV8GgWkXEJ4",
+                  "_score": 0.3891273,
+                  "_source": {
+                    "DBA": "GOLDEN KRUST CARIBBEAN BAKERY & GRILL",
+                    "BUILDING": "823",
+                    "BORO": "Brooklyn",
+                    "ZIPCODE": 11225,
+                    "GRADE": "A",
+                    "STREET": "FRANKLIN AVENUE"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "key": 40673117,
+          "doc_count": 16,
+          "sample": {
+            "hits": {
+              "total": {
+                "value": 16,
+                "relation": "eq"
+              },
+              "max_score": 0.3891273,
+              "hits": [
+                {
+                  "_index": "restaurantny-final",
+                  "_id": "GD5M8pkBQqV8GgWkadqv",
+                  "_score": 0.3891273,
+                  "_source": {
+                    "DBA": "10TH AVENUE PIZZA & CAFE",
+                    "BUILDING": "256",
+                    "BORO": "Manhattan",
+                    "ZIPCODE": 10001,
+                    "GRADE": "A",
+                    "STREET": "10 AVENUE"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "key": 40537494,
+          "doc_count": 15,
+          "sample": {
+            "hits": {
+              "total": {
+                "value": 15,
+                "relation": "eq"
+              },
+              "max_score": 0.3891273,
+              "hits": [
+                {
+                  "_index": "restaurantny-final",
+                  "_id": "_T5M8pkBQqV8GgWkaNPz",
+                  "_score": 0.3891273,
+                  "_source": {
+                    "DBA": "810 DELI & CAFE",
+                    "BUILDING": "810",
+                    "BORO": "Manhattan",
+                    "ZIPCODE": 10019,
+                    "GRADE": "A",
+                    "STREET": "7 AVENUE"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "key": 50116017,
+          "doc_count": 15,
+          "sample": {
+            "hits": {
+              "total": {
+                "value": 15,
+                "relation": "eq"
+              },
+              "max_score": 0.3891273,
+              "hits": [
+                {
+                  "_index": "restaurantny-final",
+                  "_id": "Fj5M8pkBQqV8GgWkX2BR",
+                  "_score": 0.3891273,
+                  "_source": {
+                    "DBA": "SPICE UP SWEETS AND RESTAURANT",
+                    "BUILDING": "2160",
+                    "BORO": "Bronx",
+                    "ZIPCODE": 10462,
+                    "GRADE": "A",
+                    "STREET": "WESTCHESTER AVENUE"
+                  }
+                }
+              ]
+            }
+          }
+        },...
+```
 
 
 
