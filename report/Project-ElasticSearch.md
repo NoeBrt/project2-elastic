@@ -141,7 +141,9 @@ Par cette visualisation on peut voir clairement tout les quartier de new york et
 
 ### 2.2 Which neighborhood has the most restaurants ?
 
-La commande précédente peut être reprise pour récupérer le quartier comptant le plus de restaurants, en vérifiant que l’ordonnancement est bien décroissant et en ajoutant **size = 1** pour obtenir seulement le premier résultat.
+Reprendre la visualisation précédente ne permet pas de voir clairement quel restaurant possède le plus grand nombre d’établissements.
+L’outil de clustering ne permet pas d’utiliser le nombre exact de restaurants tout en colorant les clusters par quartier.
+
 On utilise ensuite une seconde agrégation de cardinalité sur l’ID unique du restaurant afin d’obtenir le nombre total de restaurants unique.
 
 Request:
