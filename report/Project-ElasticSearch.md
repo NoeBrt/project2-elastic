@@ -135,7 +135,7 @@ Response:
 ### Visalisation
 
 
-Par cette visualisation on peut voir clairement tout les quartier de new york et les restautant present a l'interieur.
+Par cette visualisation on peut voir clairement tout les quartier de new york et les restautant present a l'interieur, divisé par zipcode.
 
 ![alt text](image-40.png)
 
