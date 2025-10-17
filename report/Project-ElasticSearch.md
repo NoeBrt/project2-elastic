@@ -673,6 +673,7 @@ En effectuant une requête match, on découvre qu’il existe plusieurs restaura
 ![alt text](image-16.png)
 
 On essaie une requête pour obtenir le terme exact "LADURÉE", mais cela ne fonctionne toujours pas, comme si DBA ne permettait pas une recherche exacte. En inspectant le mapping, on s’aperçoit que DBA ne possède pas l’option "keyword", nécessaire pour ce type de recherche (contrairement à GRADE, par exemple). On ajoute donc un champ keyword à DBA dans un nouvel index.
+
 mapping de GRADE
 ```
 {
@@ -1175,7 +1176,7 @@ Autre possibilité :
 
 ### 2.9 Identify the cuisine most affected by the violation “Hot food item not held at or above 140º F”
 
-Pour cette requete, on peux utiliser match phrase pour trouver l'exacte phrase (non case insensitive) ou match, mais cela requière d'ajuster la fuzziness pour ne pas avoir des resultat avec une description completement differente .
+Pour cette requête, on peut utiliser match_phrase afin de trouver la phrase exacte (sensible à la casse), ou match, mais dans ce cas il faut ajuster le paramètre fuzziness pour éviter d’obtenir des résultats dont la description est trop différente.
 
 requète:
 ```
@@ -1251,17 +1252,17 @@ resultat
   }
 ```
 
-La cuisine la plus affecté par cette violation sont les pizzerias
+La cuisine la plus affecté par cette violation sont les pizzerias.
 
 #### visualisation
-Pie Chart avec le filtre
 
+Pie Chart avec un filtre.
 ![alt text](image-20.png)
 
 
 ### 2.10 Determine the most common violations (Top 5)
-On aggrege sur les violation code et on affiche la violation description avec une size de 5
 
+On agrège sur les VIOLATION CODE et on affiche la VIOLATION DESCRIPTION avec une taille (size) de 5.
 ```
   GET restaurantny/_search
 {
@@ -1426,15 +1427,18 @@ le top 5 des violations :
 
 ### 2.11 Identify the most popular restaurant chain
 
-Je doit faire une aggregation sur les DBA des restaurant unique (cardinalité sur CAMIS).
+Je dois effectuer une agrégation sur les DBA des restaurants uniques (cardinalité sur CAMIS).
 
-pour la derniere requète, ma memoire n'est pas suffisante, je doit optimiser ma requete, plusieur possibilité s'ouvre a moi
+Pour la dernière requête, ma mémoire n’est pas suffisante, je dois donc optimiser la requête. Plusieurs possibilités s’offrent à moi :
 
-* Effectuer la requete sur un sample
-* reduire la precision de Cardinality
-* Effectuer la requete en batch (a la main ou via un script) pour avoir l'exact resultat.
+Effectuer la requête sur un échantillon (sample).
 
-Pour le projet, j'ai choisis de reduire le seuil de precision de la cardinnalité de 3000 a 1000, en effet la cardinnalité dans elastic search est basé sur l'algorithme Hyperloglog++ le comptage est approximatif. On peux reduire la precision pour recuperer de la puissance de calcul (https://www.elastic.co/docs/reference/aggregations/search-aggregations-metrics-cardinality-aggregation)
+Réduire la précision de la cardinalité.
+
+Exécuter la requête en batch (manuellement ou via un script) afin d’obtenir un résultat exact.
+
+Pour le projet, j’ai choisi de réduire le seuil de précision de la cardinalité de 3000 à 1000. En effet, la cardinalité dans Elasticsearch repose sur l’algorithme HyperLogLog++, qui effectue un comptage approximatif.
+On peut donc réduire la précision afin de gagner en puissance de calcul. (https://www.elastic.co/docs/reference/aggregations/search-aggregations-metrics-cardinality-aggregation)
 
 ![alt text](image-22.png)
 
@@ -1478,10 +1482,10 @@ reponse
     }
   }
 ```
-On compte 3241 document pour DUNKIN, 2003 pour SUBWAY et 1547 pour STARBUCKS. Il est probable qu'on retrouve le même top 3 pour les restaurant unique en prenant en compte la correlation entre le nombre d'inspection et le nombre de restaurant.
+On compte 3 241 documents pour DUNKIN, 2 003 pour SUBWAY et 1 547 pour STARBUCKS.
+Il est probable que l’on retrouve le même top 3 pour les restaurants uniques, en tenant compte de la corrélation entre le nombre d’inspections et le nombre de restaurants.
 
-requete avec cardinalité sur CAMIS et seuil de precision a 1500:
-
+requête avec une agrégation de cardinalité sur CAMIS et un seuil de précision fixé à 1500 :
 ```
 GET restaurantny_final/_search
 {
@@ -1541,25 +1545,24 @@ reponse
   }
 ```
 
-On obtient le même nombre de document, le seuil de precision a 1500 est donc assez precis, avec en top 3.
+On obtient le même nombre de document, le seuil de precision a 1500 est donc suffisament precise, avec en top 3:
 
 * Dukin : 348 restaurant
 * STARBUCKS : 209 restaurant
 * SUBWAY : 176 restaurant
 
-donc DUKIN est le restaurant le plus populaire.
+DUKIN est donc le restaurant le plus populaire par nombre de restaurant.
 
 #### visualisation
 
-On peux faire une table
-
+Table des restaurant par nombre.
 ![alt text](image-32.png)
-ou un bar chart (en enlevant "other" pour la lisibilité)
 
-
+barchart des restaurants par nombre.
 ![alt text](image-33.png)
-On remarque DUNKIN et DUNKIN', on pourrait refaire l'index pour enlever les caractère speciaux, mais cela pourrais aussi aggreger des restaurant different, nous estimont que notre degres de precision est suffisant.
 
+On remarque la présence de DUNKIN et DUNKIN'. Il serait possible de refaire l’index afin de supprimer les caractères spéciaux, mais cela risquerait également d’agréger des restaurants différents.
+Nous estimons donc que notre degré de précision actuel est suffisant.
 
 ## Dashboard
 
@@ -1573,27 +1576,27 @@ http://localhost:5601/app/r/s/6ns45
 
 ## Visualisation with MAP
 
-### Nombre de document par zipcode en fonction du type de cuisine
+### Nombre d'inspection par zipcode en fonction du type de cuisine.
 
 ![alt text](image-39.png)
 
-### Cluster des inspection par Voisinage
+### Cluster des inspection par quartier.
 
 ![alt text](image-35.png)
 
-### restaurant par voisinage
+### Carte du nombre de restaurant par quartier.
 
 ![alt text](image-40.png)
 
 
-### Heatmap of Unique Restaurant
+### Heatmap des restaurant.
 
 ![alt text](image-36.png)
 
-### Cluster of restaurant
+### repartition des restaurants en clusters.
 
 ![alt text](image-37.png)
 
-### Restaurant A la note de A par zipcode
+### Restaurant à la note de A par zipcode
 
 ![alt text](image-38.png)
