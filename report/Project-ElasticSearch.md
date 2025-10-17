@@ -6,7 +6,7 @@
 
 On utilise docker compose et la commande ```docker compose up -d``` pour lancer elasticsearch et kibana.
 
-```bash
+```yaml
 version: '3.8'
 
 services:
@@ -85,7 +85,7 @@ La taille limite de fichier à ingérer est par défaut de 100 MB. Malheureuseme
 Par une agrégation sur la colonne **BORO**, on récupère les **quartiers uniques** ainsi que leur **nombre d’occurrences**.
 
 Request:
-```bash
+```json
 GET /restaurantny/_search
 {
   "size": 0,
@@ -100,7 +100,7 @@ GET /restaurantny/_search
 }
 ```
 Response:
-```bash
+```json
   "aggregations": {
     "unique_boro": {
       "doc_count_error_upper_bound": 0,
@@ -147,7 +147,7 @@ L’outil de clustering ne permet pas d’utiliser le nombre exact de restaurant
 On utilise ensuite une seconde agrégation de cardinalité sur l’ID unique du restaurant afin d’obtenir le nombre total de restaurants unique.
 
 Request:
-```
+```json
 GET restaurantny/_search
 {
   "size": 0,
@@ -172,7 +172,7 @@ GET restaurantny/_search
 
 Resulat:
 
-```
+```json
 "aggregations": {
     "restaurants_by_boro": {
       "doc_count_error_upper_bound": 0,
@@ -213,7 +213,8 @@ On peux appercevoir la repartition des restaurant de new york par BORO.
 On extrait les attributs VIOLATION DESCRIPTION (et VIOLATION CODE, pour vérification) d’une ligne dont l’attribut VIOLATION CODE a pour valeur 04N.
 
 Requete
-```
+
+```json
 GET restaurantny/_search
 {
   "_source": ["VIOLATION DESCRIPTION","VIOLATION CODE"],
@@ -228,7 +229,8 @@ GET restaurantny/_search
 
 
 Resultat
-```
+
+```json
     "hits": [
       {
         "_index": "restaurantny",
@@ -256,7 +258,8 @@ On observe que le code 10F est le plus fréquent, en incluant les lignes ne pré
 
 
 La requète naïve donne une liste des restaurant avec un grade de A (l'enoncé ne precise pas si on cherche a affiner la recherche en regardant les restaurant dont la derniere note est A)
-```
+
+```json
   GET restaurantny/_search
 {
   "_source": ["DBA","BUILDING","STREET","ZIPCODE","BORO","GRADE"],
@@ -271,7 +274,7 @@ La requète naïve donne une liste des restaurant avec un grade de A (l'enoncé 
 ```
 response :
 
-```
+```json
  "hits": [
       {
         "_index": "restaurantny",
@@ -342,7 +345,7 @@ response :
 
 requète avec aggregation par id unique de restaurant "CAMIS" :
 
-```
+```json
 GET restaurantny-final/_search
 {
   "size": 0,
@@ -371,7 +374,8 @@ GET restaurantny-final/_search
 ```
 
 reponse :
-```
+
+```json
 {
   "took": 593,
   "timed_out": false,
@@ -521,7 +525,8 @@ On peut également ajouter la médiane des scores par BORO. On découvre alors q
 
 ### 2.5 What is the most popular cuisine? And by neighborhood?
 
-```GET restaurantny/_search
+
+```json
 GET restaurantny_final/_search
 {
   "size": 0,
@@ -545,7 +550,8 @@ GET restaurantny_final/_search
 }
 ```
 response:
-```
+
+```json
   "aggregations": {
     "top3_Description": {
       "doc_count_error_upper_bound": -1,
@@ -581,7 +587,7 @@ La cuisine la plus populaire de New York, en nombre de restaurants, est la cuisi
 
 Par Voisinage:
 
-```
+```json
 GET restaurantny_final/_search
 {
   "size": 0,
@@ -614,7 +620,8 @@ GET restaurantny_final/_search
 ```
 
 reponse:
-```
+
+```json
 "aggregations": {
     "by_boro": {
       "doc_count_error_upper_bound": 0,
@@ -729,8 +736,7 @@ On peut utiliser un double pie chart ou une mosaïque afin de visualiser la cuis
 ![alt text](image-27.png)
 ### 2.6 What is the date of the last inspection?
 
-```
-
+```json
 GET restaurantny/_search
 {
   "_source": ["INSPECTION DATE","DBA"],
@@ -742,7 +748,8 @@ GET restaurantny/_search
 ```
 
 reponse :
-```
+
+```json
    "hits": [
       {
         "_index": "restaurantny",
@@ -771,7 +778,7 @@ On peut utiliser un diagramme temporel en barres ou en lignes pour visualiser l�
 
 On utilise la commande bool pour trouver les restaurants qui doivent (must) remplir les conditions suivantes : "CUISINE DESCRIPTION": "Chinese", "GRADE": "A" et "BORO": "Brooklyn".
 
-```
+```json
 GET restaurantny/_search
 {
   "_source": ["DBA"],
@@ -788,7 +795,8 @@ GET restaurantny/_search
 ```
 
 resultat:
-```
+
+```json
  "hits": [
       {
         "_index": "restaurantny",
@@ -848,7 +856,8 @@ En effectuant une requête match, on découvre qu’il existe plusieurs restaura
 On essaie une requête pour obtenir le terme exact "LADURÉE", mais cela ne fonctionne toujours pas, comme si DBA ne permettait pas une recherche exacte. En inspectant le mapping, on s’aperçoit que DBA ne possède pas l’option "keyword", nécessaire pour ce type de recherche (contrairement à GRADE, par exemple). On ajoute donc un champ keyword à DBA dans un nouvel index.
 
 mapping de GRADE
-```
+
+```json
 {
   "restaurantny": {
     "mappings": {
@@ -867,7 +876,7 @@ mapping de GRADE
 
 mapping de DBA
 
-```
+```json
 {
   "restaurantny": {
     "mappings": {
@@ -886,7 +895,7 @@ mapping de DBA
 
 ajout de keyword a DBA a restaurant NY v1
 
-```
+```json
 PUT restaurantny_v1
 {
   "mappings": {
@@ -902,7 +911,7 @@ PUT restaurantny_v1
 ```
 reindexation
 
-```
+```json
 POST _reindex
 {
   "source": { "index": "restaurantny" },
@@ -912,7 +921,8 @@ POST _reindex
 
 On ressaye la requete, on aggress sur le numero CAMIS pour être sur d'avoir la liste des restaurant unique en fonction de leur ID appelé LADUREE, on met la size de la seconde agreggation a 1 pour ne pas avoir des doublons en cas de multiple inspections.
 
-```GET restaurantny_v1/_search
+```json
+GET restaurantny_v1/_search
 {
   "size": 0,
   "query": {
@@ -942,7 +952,7 @@ On ressaye la requete, on aggress sur le numero CAMIS pour être sur d'avoir la 
 
 resultat
 
-```
+```json
 {
   "took": 0,
   "timed_out": false,
@@ -1005,7 +1015,8 @@ l'adresse du restautant LADUREE est 864 MADISON AVENUE,Manhattan.
 Pour visualiser avec les nouveaux filtres, on met à jour notre Data View afin d’utiliser le nouvel index. Cependant, je me suis aperçu que le réindexage n’avait pas pris en compte les dates ni la location. Je corrige donc le réindexage pour inclure ces champs.
 
 mapping de restaurantny
-```
+
+```json
 {
   "restaurantny": {
     "mappings": {
@@ -1107,7 +1118,8 @@ mapping de restaurantny
 ```
 
 Mapping de restaurantny_v1
-```
+
+```json
 {
   "restaurantny_v1": {
     "mappings": {
@@ -1352,7 +1364,8 @@ Autre possibilité :
 Pour cette requête, on peut utiliser match_phrase afin de trouver la phrase exacte (sensible à la casse), ou match, mais dans ce cas il faut ajuster le paramètre fuzziness pour éviter d’obtenir des résultats dont la description est trop différente.
 
 requète:
-```
+
+```json
 GET restaurantny/_search
 {
   "size": 0,
@@ -1374,7 +1387,8 @@ GET restaurantny/_search
 ```
 
 resultat
-```
+
+```json
  "aggregations": {
     "most_affected_cuisine": {
       "doc_count_error_upper_bound": 0,
@@ -1436,7 +1450,8 @@ Pie Chart avec un filtre.
 ### 2.10 Determine the most common violations (Top 5)
 
 On agrège sur les VIOLATION CODE et on affiche la VIOLATION DESCRIPTION avec une taille (size) de 5.
-```
+
+```json
   GET restaurantny/_search
 {
   "size": 0,
@@ -1461,7 +1476,8 @@ On agrège sur les VIOLATION CODE et on affiche la VIOLATION DESCRIPTION avec un
 ```
 
 resultat
-```
+
+```json
 "aggregations": {
     "most_affected_cuisine": {
       "doc_count_error_upper_bound": 0,
@@ -1617,7 +1633,7 @@ On peut donc réduire la précision afin de gagner en puissance de calcul. (http
 
 Pour verifier la pertinence du resultat, On verifie le nombre de document compté avec une aggregation classique
 
-```
+```json
 GET restaurantny_final/_search
 {
   "size": 0,
@@ -1633,7 +1649,8 @@ GET restaurantny_final/_search
 ```
 
 reponse
-```
+
+```json
 "aggregations": {
     "restaurants_by_DBA": {
       "doc_count_error_upper_bound": 0,
@@ -1659,7 +1676,8 @@ On compte 3 241 documents pour DUNKIN, 2 003 pour SUBWAY et 1 547 pour STARBUCKS
 Il est probable que l’on retrouve le même top 3 pour les restaurants uniques, en tenant compte de la corrélation entre le nombre d’inspections et le nombre de restaurants.
 
 requête avec une agrégation de cardinalité sur CAMIS et un seuil de précision fixé à 1500 :
-```
+
+```json
 GET restaurantny_final/_search
 {
   "size": 0,
@@ -1686,7 +1704,7 @@ GET restaurantny_final/_search
 
 reponse
 
-```
+```json
 "aggregations": {
     "restaurants_by_DBA": {
       "doc_count_error_upper_bound": -1,
