@@ -255,6 +255,7 @@ On observe que le code 10F est le plus fréquent, en incluant les lignes ne pré
 ### 2.4 Where are the restaurants (name, address, neighborhood) that have a grade of A?
 
 
+La requète naïve donne une liste des restaurant avec un grade de A (l'enoncé ne precise pas si on cherche a affiner la recherche en regardant les restaurant dont la derniere note est A)
 ```
   GET restaurantny/_search
 {
@@ -338,6 +339,12 @@ response :
         }
       },...
 ```
+
+requète avec tri :
+
+
+
+
 #### Visualisation
 
 L’outil de visualisation n’autorise pas l’utilisation de DBA comme métrique. J’ai donc choisi de visualiser la proportion des notes parmi l’ensemble des restaurants. Les outils dynamiques du dashboard permettront ensuite d’ajuster la granularité.
