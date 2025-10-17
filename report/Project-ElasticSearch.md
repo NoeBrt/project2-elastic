@@ -85,7 +85,7 @@ La taille limite de fichier à ingérer est par défaut de 100 MB. Malheureuseme
 Par une agrégation sur la colonne **BORO**, on récupère les **quartiers uniques** ainsi que leur **nombre d’occurrences**.
 
 Request:
-```
+```bash
 GET /restaurantny/_search
 {
   "size": 0,
@@ -100,7 +100,7 @@ GET /restaurantny/_search
 }
 ```
 Response:
-```
+```bash
   "aggregations": {
     "unique_boro": {
       "doc_count_error_upper_bound": 0,
