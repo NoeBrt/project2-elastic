@@ -73,7 +73,7 @@ networks:
 ## Ingestion
 On cherche a ingerer [NYC Restaurant Inspection Results](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data).
 
-La taille limite de fichier à ingerer est par default de 100b, malheuresement le csv a ingerer est de 123Mb, on change la limite a 150mb dans Advanced settings.
+La taille limite de fichier à ingérer est par défaut de 100 MB. Malheureusement, le fichier CSV à ingérer fait 123 MB. Nous modifions donc la limite à 150 MB dans les paramètres avancés.
 
 ![alt text](image.png)
 
@@ -82,7 +82,7 @@ La taille limite de fichier à ingerer est par default de 100b, malheuresement l
 
 ### 2.1 List all the neighborhoods in New York.
 
-Par une agreggation sur la colonne BORO on recupère les neighborhoods unique en plus de leur nombre d'occurence.
+Par une agrégation sur la colonne **BORO**, on récupère les **quartiers uniques** ainsi que leur **nombre d’occurrences**.
 
 Request:
 ```
@@ -141,7 +141,8 @@ Par cette visualisation on peut voir clairement tout les quartier de new york et
 
 ### 2.2 Which neighborhood has the most restaurants ?
 
-La commande precedente peut etre reprise pour recuperer le quartier avec le plus de restaurant en verifiant que l'ordonnement est bien decroissant et en ajoutant size=1 pour obtenir seulemen le premier resultat. On utilise une deuxiemme aggregation de cardinalité sur l'id unique du restaurant pour obtenir le nombre de restaurant.
+La commande précédente peut être reprise pour récupérer le quartier comptant le plus de restaurants, en vérifiant que l’ordonnancement est bien décroissant et en ajoutant **size = 1** pour obtenir seulement le premier résultat.
+On utilise ensuite une seconde agrégation de cardinalité sur l’ID unique du restaurant afin d’obtenir le nombre total de restaurants unique.
 
 Request:
 ```
@@ -192,21 +193,23 @@ Manahattan possède 12113 restaurant, faisant de ce quartier celui avec la plus 
 
 #### visualitation
 
-Resprendre la visualition precedente en ajoutant un label permet de se rendre compte approximativement du nombre de restaurant par quartier, mais cela manque de lisibilité
+Reprendre la visualisation précédente en y ajoutant un label permet de se faire une idée approximative du nombre de restaurants par quartier, mais cela manque de lisibilité.
 
 ![Carte de restaurant de New York par Clusters de quartier](image-2.png)
-Comme la heatmap, on se rend compte de la plus grande densité de Manahattan mais ça reste moin evident qu'un barchart, on met en unique count CAMIS pour avoir seulement les restaurant.
+
+Comme sur la heatmap, on remarque une plus grande densité à Manhattan, mais cela reste moins évident qu’avec un barchart.
+On utilise donc un unique count sur CAMIS afin de ne compter que les restaurants uniques.
 
 ![alt text](image-25.png)
 
 
-On peux appercevoir la repartition des restaurant de new york par BORO
+On peux appercevoir la repartition des restaurant de new york par BORO.
 
 ![alt text](image-26.png)
 
 ### 2.3 What does the violation code "04N" correspond to ?
 
-On extrait l'attribut VIOLATION DESCRIPTION (et VIOLATION CODE histoire d'etre sur) d'une ligne dont l'attrivbut VIOLATION CODE a comme valeur 04N.
+On extrait les attributs VIOLATION DESCRIPTION (et VIOLATION CODE, pour vérification) d’une ligne dont l’attribut VIOLATION CODE a pour valeur 04N.
 
 Requete
 ```
@@ -239,11 +242,12 @@ Resultat
   }
 }
 ```
-Le code 04N correspond a présence de mouches ou d’autres insectes dans les zones de préparation, de stockage ou de service des aliments.
+Le code 04N correspond à la présence de mouches ou d’autres insectes dans les zones de préparation, de stockage ou de service des aliments.
 
 #### viusalitation
 
-Voicis la proportion des code de violation present dans les restaurant enregistré, on voit que 10F est le code de violation le plus present, incluant les lignes qui ne presente pas de code.
+Voici la proportion des codes de violation présents dans les restaurants enregistrés.
+On observe que le code 10F est le plus fréquent, en incluant les lignes ne présentant pas de code.
 ![Proportion des code de violation present dans les restanrant de new york](image-6.png)
 
 
@@ -335,13 +339,11 @@ response :
 ```
 #### Visualisation
 
-L'outil de visualisation n'autorise pas d'utiliser DBA comme une metrique, je choisis de visualisé la proportion des notes parmis tout les restaurant, les outils dynamique du dashbord permetteron d'ajuster la granulité.
-
+L’outil de visualisation n’autorise pas l’utilisation de DBA comme métrique. J’ai donc choisi de visualiser la proportion des notes parmi l’ensemble des restaurants. Les outils dynamiques du dashboard permettront ensuite d’ajuster la granularité.
 
 ![alt text](image-30.png)
 
-On peux aussi ajouter la medianne des score par BORO, on decouvre que le Queens a la meilleure medianne parmis les BORO
-
+On peut également ajouter la médiane des scores par BORO. On découvre alors que le Queens présente la meilleure médiane parmi tous les BORO.
 ![alt text](image-9.png)
 
 ### 2.5 What is the most popular cuisine? And by neighborhood?
@@ -402,9 +404,9 @@ response:
   }
 ```
 
-La cuisine la plus populaire de new york par le nombre de restautant est la cuisine americaine, avec 4964 restaurant suivit par la cuisine chinoise et les coffee/tea shop.
+La cuisine la plus populaire de New York, en nombre de restaurants, est la cuisine américaine, avec 4 964 établissements, suivie par la cuisine chinoise et les coffee/tea shops.
 
-Par BORO:
+Par Voisinage:
 
 ```
 GET restaurantny_final/_search
@@ -543,11 +545,11 @@ par BORO, la cuisine la plus populaire est
 
 #### visualisation
 
-Pour New-york, on peux utiliser un pie chart classique, ou un waffle chart (la visibilité reste moin bonne)
+Pour New York, on peut utiliser un pie chart classique ou un waffle chart (dont la visibilité reste toutefois moins bonne).
 
 ![alt text](image-29.png)
 
-On peux utiliser un double pie chart ou une mosaique pour voir la cuisine la plus populaire par BORO
+On peut utiliser un double pie chart ou une mosaïque afin de visualiser la cuisine la plus populaire par BORO.
 
 ![alt text](image-28.png)
 
@@ -583,17 +585,19 @@ reponse :
       }
 ```
 
-la derniere inspection date du 10/09/2025 et concerne LE PETIT MONTRE.
+La dernière inspection date du 10/09/2025 et concerne le restaurant LE PETIT MONSTRE.
 
 #### visulation
-On peux utiliser un diagramme temporel en barre ou en ligne pour connaire l'evolution du nombre d'inspection en fonction du temps
+
+On peut utiliser un diagramme temporel en barres ou en lignes pour visualiser l’évolution du nombre d’inspections au fil du temps.
 
 ![alt text](image-14.png)
 
 
 ### 2.7 Provide a list of Chinese restaurants with an A grade in Brooklyn.
 
-On utilise la commande bool  pour trouver les resaurant qui doivent (must) remplir les condition "CUISINE DESCRIPTION": "Chinese", "GRADE": "A" et "BORO": "Brooklyn".
+On utilise la commande bool pour trouver les restaurants qui doivent (must) remplir les conditions suivantes : "CUISINE DESCRIPTION": "Chinese", "GRADE": "A" et "BORO": "Brooklyn".
+
 ```
 GET restaurantny/_search
 {
@@ -658,17 +662,17 @@ resultat:
 
 #### Visualisation
 
-On peux utiliser les controles pour obtenir une liste des restaurant avec ces critères
+On peut utiliser les contrôles afin d’obtenir une liste des restaurants correspondant à ces critères.
 
 ![alt text](image-15.png)
 
 ### 2.8 Provide the address of the restaurant LADUREE
 
-en faisant un match, on decouvre qu'il y a plusieur restaurant LADUREE (laduree, LADUREE soho et LADUREE)
+En effectuant une requête match, on découvre qu’il existe plusieurs restaurants LADURÉE (LADURÉE, LADURÉE Soho et LADURÉE).
+
 ![alt text](image-16.png)
 
-On essaye une requete pour avoir le terme exact LADUREE. mais cela ne marche toujours pas, comme si DBA ne marchais pas avec une recherche exacte. En inspectant le mapping on s'apperçoit que DBA n'a pas d'option "keyword" qui permet une recherche exacte (contrairement a GRADE par exemple). On indexe keyword a DBA dans un nouveau index.
-
+On essaie une requête pour obtenir le terme exact "LADURÉE", mais cela ne fonctionne toujours pas, comme si DBA ne permettait pas une recherche exacte. En inspectant le mapping, on s’aperçoit que DBA ne possède pas l’option "keyword", nécessaire pour ce type de recherche (contrairement à GRADE, par exemple). On ajoute donc un champ keyword à DBA dans un nouvel index.
 mapping de GRADE
 ```
 {
@@ -824,7 +828,7 @@ l'adresse du restautant LADUREE est 864 MADISON AVENUE,Manhattan.
 
 #### visulisation
 
-pour visualiser avec les nouveau filtre, on update notre dataview pour utiliser le nouvel index, mais je me suis rendu compte que le reindexage n'a pas pris en compte les dates ainsi que "location", je corrige le reindexage.
+Pour visualiser avec les nouveaux filtres, on met à jour notre Data View afin d’utiliser le nouvel index. Cependant, je me suis aperçu que le réindexage n’avait pas pris en compte les dates ni la location. Je corrige donc le réindexage pour inclure ces champs.
 
 mapping de restaurantny
 ```
@@ -1156,17 +1160,17 @@ PUT restaurantny_v1
     }
 }
 ```
-On peux finallement visualiser la localisation du restaurant LADUREE
-
+On peut finalement visualiser la localisation du restaurant LADURÉE.
 
 ![alt text](image-19.png)
 
-Cette methode, bien que optimisé, est assez longue et provoque des erreurs si l'on oublie des field dans le mapping ou si l'on ne reecrit pas le meme mapping a la main (par exemple, tout mes type keyword ont été transformé en text avec une propriété keyword.
+Cette méthode peut provoquer des erreurs de typage en raison d’une mauvaise spécification de tous les types ; par exemple, lors du réindexage, plusieurs champs de type keyword se sont transformés en champs text avec un attribut keyword.
 
-Une methode plus rapide :
+Autre possibilité :
 
-* pour les petit dataset, reupload la data et ajoutant keyword au field DBA
-* ajouter un field DBA_keyword a notre index de base, mais ce serais moins optimisé car les deux champs sont stocké et indexé differement.
+* Pour les petits datasets, réimporter les données en ajoutant directement l’attribut keyword au champ DBA.
+
+* Ajouter un champ DBA_keyword à l’index de base, mais cela serait moins optimisé, car les deux champs seraient stockés et indexés différemment.
 
 
 ### 2.9 Identify the cuisine most affected by the violation “Hot food item not held at or above 140º F”
