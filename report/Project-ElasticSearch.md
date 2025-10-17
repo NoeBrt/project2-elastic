@@ -6,7 +6,7 @@
 
 On utilise docker compose et la commande ```docker compose up -d``` pour lancer elasticsearch et kibana.
 
-```
+```bash
 version: '3.8'
 
 services:
