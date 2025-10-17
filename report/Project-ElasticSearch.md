@@ -137,7 +137,7 @@ Response:
 
 Par cette visualisation on peut voir clairement tout les quartier de new york et les restautant present a l'interieur.
 
-![Visualization of all the restaurant of new york colored by neighborhoods](image-1.png)
+![alt text](image-40.png)
 
 ### 2.2 Which neighborhood has the most restaurants ?
 
