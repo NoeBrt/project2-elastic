@@ -776,19 +776,35 @@ On peut utiliser un diagramme temporel en barres ou en lignes pour visualiser l�
 
 ### 2.7 Provide a list of Chinese restaurants with an A grade in Brooklyn.
 
-On utilise la commande bool pour trouver les restaurants qui doivent (must) remplir les conditions suivantes : "CUISINE DESCRIPTION": "Chinese", "GRADE": "A" et "BORO": "Brooklyn".
+On utilise la commande bool pour trouver les restaurants qui doivent (must) remplir les conditions suivantes : "CUISINE DESCRIPTION": "Chinese", "GRADE": "A" et "BORO": "Brooklyn", et on aggrege sur CAMIS pour ne pas avoir de doublon.
 
 ```json
-GET restaurantny/_search
+GET restaurantny-final/_search
 {
-  "_source": ["DBA"],
+  "size": 0,
   "query": {
     "bool": {
       "must": [
-        { "term": { "CUISINE DESCRIPTION": "Chinese" } },
-        { "term": { "GRADE": "A" } },
-        { "term": { "BORO": "Brooklyn" } }
+        { "match": { "CUISINE DESCRIPTION": "Chinese" } },
+        { "match": { "GRADE": "A" } },
+        { "match": { "BORO": "Brooklyn" } }
       ]
+    }
+  },
+  "aggs": {
+    "unique_restaurants": {
+      "terms": {
+        "field": "CAMIS",
+        "size": 10000
+      },
+      "aggs": {
+        "sample": {
+          "top_hits": {
+            "_source": ["DBA", "GRADE", "BORO", "CUISINE DESCRIPTION"],
+            "size": 1
+          }
+        }
+      }
     }
   }
 }
@@ -797,55 +813,150 @@ GET restaurantny/_search
 resultat:
 
 ```json
- "hits": [
-      {
-        "_index": "restaurantny",
-        "_id": "rBOH3JkByv84jpscZM_8",
-        "_score": 4.0605974,
-        "_source": {
-          "DBA": "NEW CENTURY CHINESE RESTAURANT"
-        }
-      },
-      {
-        "_index": "restaurantny",
-        "_id": "HhOH3JkByv84jpscZND8",
-        "_score": 4.0605974,
-        "_source": {
-          "DBA": "NEW GREAT WALL 1419"
-        }
-      },
-      {
-        "_index": "restaurantny",
-        "_id": "nhOH3JkByv84jpscZND8",
-        "_score": 4.0605974,
-        "_source": {
-          "DBA": "FOOD LOVER BAKERY"
-        }
-      },
-      {
-        "_index": "restaurantny",
-        "_id": "UROH3JkByv84jpscZNH8",
-        "_score": 4.0605974,
-        "_source": {
-          "DBA": "SUN GARDEN"
-        }
-      },
-      {
-        "_index": "restaurantny",
-        "_id": "WROH3JkByv84jpscZNH8",
-        "_score": 4.0605974,
-        "_source": {
-          "DBA": "GRAND PANDA"
-        }
-      },
-      {...
+ "aggregations": {
+    "unique_restaurants": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": 41529719,
+          "doc_count": 12,
+          "sample": {
+            "hits": {
+              "total": {
+                "value": 12,
+                "relation": "eq"
+              },
+              "max_score": 4.0605974,
+              "hits": [
+                {
+                  "_index": "restaurantny-final",
+                  "_id": "Gz5M8pkBQqV8GgWkZ71f",
+                  "_score": 4.0605974,
+                  "_source": {
+                    "DBA": "WING HUA II",
+                    "BORO": "Brooklyn",
+                    "CUISINE DESCRIPTION": "Chinese",
+                    "GRADE": "A"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "key": 41689789,
+          "doc_count": 10,
+          "sample": {
+            "hits": {
+              "total": {
+                "value": 10,
+                "relation": "eq"
+              },
+              "max_score": 4.0605974,
+              "hits": [
+                {
+                  "_index": "restaurantny-final",
+                  "_id": "7T5M8pkBQqV8GgWkWBIz",
+                  "_score": 4.0605974,
+                  "_source": {
+                    "DBA": "EGG ROLL CHINESE RESTAURANT",
+                    "BORO": "Brooklyn",
+                    "CUISINE DESCRIPTION": "Chinese",
+                    "GRADE": "A"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "key": 50111711,
+          "doc_count": 10,
+          "sample": {
+            "hits": {
+              "total": {
+                "value": 10,
+                "relation": "eq"
+              },
+              "max_score": 4.0605974,
+              "hits": [
+                {
+                  "_index": "restaurantny-final",
+                  "_id": "LT5M8pkBQqV8GgWkZa-O",
+                  "_score": 4.0605974,
+                  "_source": {
+                    "DBA": "JUNE'S BAKERY & CAFE",
+                    "BORO": "Brooklyn",
+                    "CUISINE DESCRIPTION": "Chinese",
+                    "GRADE": "A"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "key": 50119577,
+          "doc_count": 10,
+          "sample": {
+            "hits": {
+              "total": {
+                "value": 10,
+                "relation": "eq"
+              },
+              "max_score": 4.0605974,
+              "hits": [
+                {
+                  "_index": "restaurantny-final",
+                  "_id": "uD9M8pkBQqV8GgWkepnf",
+                  "_score": 4.0605974,
+                  "_source": {
+                    "DBA": "EMPIRE EXPRESS",
+                    "BORO": "Brooklyn",
+                    "CUISINE DESCRIPTION": "Chinese",
+                    "GRADE": "A"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "key": 40605862,
+          "doc_count": 9,
+          "sample": {
+            "hits": {
+              "total": {
+                "value": 9,
+                "relation": "eq"
+              },
+              "max_score": 4.0605974,
+              "hits": [
+                {
+                  "_index": "restaurantny-final",
+                  "_id": "qz5M8pkBQqV8GgWkZ8Jf",
+                  "_score": 4.0605974,
+                  "_source": {
+                    "DBA": "LICHEE NUT",
+                    "BORO": "Brooklyn",
+                    "CUISINE DESCRIPTION": "Chinese",
+                    "GRADE": "A"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {...
 ```
 
 #### Visualisation
 
 On peut utiliser les contrôles afin d’obtenir une liste des restaurants correspondant à ces critères.
 
-![alt text](image-15.png)
+<img width="1912" height="694" alt="image" src="https://github.com/user-attachments/assets/468f6417-cae3-4cf4-ae06-59feea304e30" />
+
 
 ### 2.8 Provide the address of the restaurant LADUREE
 
