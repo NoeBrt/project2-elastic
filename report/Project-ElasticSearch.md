@@ -1,6 +1,6 @@
 # Project: NYC Restaurant Inspection Data
 
-**Noé Breton** et **Reda Bourssouf**
+**Noé Breton** et **Reda Boudrouss**
 
 ## Installations de Elastic Search
 
