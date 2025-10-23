@@ -2,7 +2,51 @@
 
 **Noé Breton** et **Reda Boudrouss**
 
-## Installations de Elastic Search
+## Introduction
+
+Durant ce projet, nous avons tenté d’explorer les capacités et les éventuelles limites du moteur de recherche Elasticsearch, à travers l’outil de visualisation Kibana. Requêtes, visualisations et même réindexation : voici un compte rendu de notre expérience.
+
+## Table of Contents
+
+- [Project: NYC Restaurant Inspection Data](#project-nyc-restaurant-inspection-data)
+  - [Introduction](#introduction)
+  - [Table of Contents](#table-of-contents)
+  - [Setup](#setup)
+  - [1. Ingestion](#1-ingestion)
+  - [2. Questions](#2-questions)
+    - [2.1 List all the neighborhoods in New York.](#21-list-all-the-neighborhoods-in-new-york)
+      - [Visualisation](#visualisation)
+    - [2.2 Which neighborhood has the most restaurants ?](#22-which-neighborhood-has-the-most-restaurants-)
+      - [Visualisation](#visualisation-1)
+    - [2.3 What does the violation code "04N" correspond to ?](#23-what-does-the-violation-code-04n-correspond-to-)
+      - [Visualisation](#visualisation-2)
+    - [2.4 Where are the restaurants (name, address, neighborhood) that have a grade of A?](#24-where-are-the-restaurants-name-address-neighborhood-that-have-a-grade-of-a)
+      - [Visualisation](#visualisation-3)
+    - [2.5 What is the most popular cuisine? And by neighborhood?](#25-what-is-the-most-popular-cuisine-and-by-neighborhood)
+      - [Visualisation](#visualisation-4)
+    - [2.6 What is the date of the last inspection?](#26-what-is-the-date-of-the-last-inspection)
+      - [Visualisation](#visualisation-5)
+    - [2.7 Provide a list of Chinese restaurants with an A grade in Brooklyn.](#27-provide-a-list-of-chinese-restaurants-with-an-a-grade-in-brooklyn)
+      - [Visualisation](#visualisation-6)
+    - [2.8 Provide the address of the restaurant LADUREE](#28-provide-the-address-of-the-restaurant-laduree)
+      - [Visualisation](#visualisation-7)
+    - [2.9 Identify the cuisine most affected by the violation “Hot food item not held at or above 140º F”](#29-identify-the-cuisine-most-affected-by-the-violation-hot-food-item-not-held-at-or-above-140º-f)
+      - [Visualisation](#visualisation-8)
+    - [2.10 Determine the most common violations (Top 5)](#210-determine-the-most-common-violations-top-5)
+      - [Visualisation](#visualisation-9)
+    - [2.11 Identify the most popular restaurant chain](#211-identify-the-most-popular-restaurant-chain)
+      - [Visualisation](#visualisation-10)
+  - [3 Dashboard avec controles](#3-dashboard-avec-controles)
+    - [3.2 Visualisation with MAP](#32-visualisation-with-map)
+      - [Nombre d'inspection par zipcode en fonction du type de cuisine.](#nombre-dinspection-par-zipcode-en-fonction-du-type-de-cuisine)
+      - [Cluster des inspection par quartier.](#cluster-des-inspection-par-quartier)
+      - [Carte du nombre de restaurant par zipcode.](#carte-du-nombre-de-restaurant-par-zipcode)
+      - [Heatmap des restaurant.](#heatmap-des-restaurant)
+      - [repartition des restaurants en clusters.](#repartition-des-restaurants-en-clusters)
+      - [Restaurant à la note de A par zipcode](#restaurant-à-la-note-de-a-par-zipcode)
+  - [Conclusion](#conclusion)
+
+## Setup
 
 On utilise docker compose et la commande ```docker compose up -d``` pour lancer elasticsearch et kibana.
 
@@ -70,7 +114,7 @@ networks:
     driver: bridge
 ```
 
-## Ingestion
+## 1. Ingestion
 On cherche a ingerer [NYC Restaurant Inspection Results](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data).
 
 La taille limite de fichier à ingérer est par défaut de 100 MB. Malheureusement, le fichier CSV à ingérer fait 123 MB. Nous modifions donc la limite à 150 MB dans les paramètres avancés.
@@ -132,7 +176,7 @@ Response:
 }
 ```
 
-### Visalisation
+#### Visualisation
 
 
 Par cette visualisation on peut voir clairement tout les quartier de new york et les restautant present a l'interieur, divisé par zipcode.
@@ -193,7 +237,7 @@ Resulat:
 
 Manahattan possède 12113 restaurant, faisant de ce quartier celui avec la plus grande offre de restauration.
 
-#### visualitation
+#### Visualisation
 
 Reprendre la visualisation précédente ne permet pas de visualisé clairement quel restaurant a le plus grand nombre de restaurant, l'outil de cluster ne permet pas d'utiliser le nombre de restaurant exact tout en coloarant les clusters par quartier.
 
@@ -247,7 +291,7 @@ Resultat
 ```
 Le code 04N correspond à la présence de mouches ou d’autres insectes dans les zones de préparation, de stockage ou de service des aliments.
 
-#### viusalitation
+#### Visualisation
 
 Voici la proportion des codes de violation présents dans les restaurants enregistrés.
 On observe que le code 10F est le plus fréquent, en incluant les lignes ne présentant pas de code.
@@ -723,7 +767,7 @@ par BORO, la cuisine la plus populaire est
 | **Staten Island** | American                      | 164                     |
 
 
-#### visualisation
+#### Visualisation
 
 Pour New York, on peut utiliser un pie chart classique ou un waffle chart (dont la visibilité reste toutefois moins bonne).
 
@@ -767,7 +811,7 @@ reponse :
 
 La dernière inspection date du 10/09/2025 et concerne le restaurant LE PETIT MONSTRE.
 
-#### visulation
+#### Visualisation
 
 On peut utiliser un diagramme temporel en barres ou en lignes pour visualiser l’évolution du nombre d’inspections au fil du temps.
 
@@ -955,8 +999,7 @@ resultat:
 
 On peut utiliser les contrôles afin d’obtenir une liste des restaurants correspondant à ces critères.
 
-<img width="1912" height="694" alt="image" src="https://github.com/user-attachments/assets/468f6417-cae3-4cf4-ae06-59feea304e30" />
-
+![alt text](image-44.png)
 
 ### 2.8 Provide the address of the restaurant LADUREE
 
@@ -1121,310 +1164,10 @@ resultat
 
 l'adresse du restautant LADUREE est 864 MADISON AVENUE,Manhattan.
 
-#### visulisation
+#### Visualisation
 
 Pour visualiser avec les nouveaux filtres, on met à jour notre Data View afin d’utiliser le nouvel index. Cependant, je me suis aperçu que le réindexage n’avait pas pris en compte les dates ni la location. Je corrige donc le réindexage pour inclure ces champs.
 
-mapping de restaurantny
-
-```json
-{
-  "restaurantny": {
-    "mappings": {
-      "_meta": {
-        "created_by": "file-data-visualizer"
-      },
-      "properties": {
-        "@timestamp": {
-          "type": "date"
-        },
-        "ACTION": {
-          "type": "text"
-        },
-        "BBL": {
-          "type": "long"
-        },
-        "BIN": {
-          "type": "long"
-        },
-        "BORO": {
-          "type": "keyword"
-        },
-        "BUILDING": {
-          "type": "keyword"
-        },
-        "CAMIS": {
-          "type": "long"
-        },
-        "CRITICAL FLAG": {
-          "type": "keyword"
-        },
-        "CUISINE DESCRIPTION": {
-          "type": "keyword"
-        },
-        "Census Tract": {
-          "type": "long"
-        },
-        "Community Board": {
-          "type": "long"
-        },
-        "Council District": {
-          "type": "long"
-        },
-        "DBA": {
-          "type": "text"
-        },
-        "GRADE": {
-          "type": "keyword"
-        },
-        "GRADE DATE": {
-          "type": "date",
-          "format": "MM/dd/yyyy"
-        },
-        "INSPECTION DATE": {
-          "type": "date",
-          "format": "MM/dd/yyyy"
-        },
-        "INSPECTION TYPE": {
-          "type": "keyword"
-        },
-        "Latitude": {
-          "type": "double"
-        },
-        "Longitude": {
-          "type": "double"
-        },
-        "NTA": {
-          "type": "keyword"
-        },
-        "PHONE": {
-          "type": "keyword"
-        },
-        "RECORD DATE": {
-          "type": "date",
-          "format": "MM/dd/yyyy"
-        },
-        "SCORE": {
-          "type": "long"
-        },
-        "STREET": {
-          "type": "keyword"
-        },
-        "VIOLATION CODE": {
-          "type": "keyword"
-        },
-        "VIOLATION DESCRIPTION": {
-          "type": "text"
-        },
-        "ZIPCODE": {
-          "type": "long"
-        },
-        "location": {
-          "type": "geo_point"
-        }
-      }
-    }
-  }
-}
-```
-
-Mapping de restaurantny_v1
-
-```json
-{
-  "restaurantny_v1": {
-    "mappings": {
-      "properties": {
-        "@timestamp": {
-          "type": "date"
-        },
-        "ACTION": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "BBL": {
-          "type": "long"
-        },
-        "BIN": {
-          "type": "long"
-        },
-        "BORO": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "BUILDING": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "CAMIS": {
-          "type": "long"
-        },
-        "CRITICAL FLAG": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "CUISINE DESCRIPTION": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "Census Tract": {
-          "type": "long"
-        },
-        "Community Board": {
-          "type": "long"
-        },
-        "Council District": {
-          "type": "long"
-        },
-        "DBA": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword"
-            }
-          }
-        },
-        "GRADE": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "GRADE DATE": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "INSPECTION DATE": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "INSPECTION TYPE": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "Latitude": {
-          "type": "float"
-        },
-        "Longitude": {
-          "type": "float"
-        },
-        "NTA": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "PHONE": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "RECORD DATE": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "SCORE": {
-          "type": "long"
-        },
-        "STREET": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "VIOLATION CODE": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "VIOLATION DESCRIPTION": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "ZIPCODE": {
-          "type": "long"
-        },
-        "location": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
 
 On recommance l'indexation
 ```
@@ -1552,7 +1295,7 @@ resultat
 
 La cuisine la plus affecté par cette violation sont les pizzerias.
 
-#### visualisation
+#### Visualisation
 
 Pie Chart avec un filtre.
 ![alt text](image-20.png)
@@ -1721,7 +1464,7 @@ le top 5 des violations :
 | **4** | **02G**        | Cold TCS food item held above 41 °F; smoked or processed fish held above 38 °F; intact raw eggs held above 45 °F; or reduced-oxygen packaged (ROP) TCS foods held above required temperatures except during active necessary preparation. |       **18 056**      |
 | **5** | **10B**        | Anti-siphonage or back-flow prevention device not provided where required; equipment or floor not properly drained; sewage disposal system in disrepair or not functioning properly; condensation or liquid waste improperly disposed of. |       **17 746**      |
 
-#### visualisation
+#### Visualisation
 
 ![alt text](image-21.png)
 
@@ -1855,7 +1598,7 @@ On obtient le même nombre de document, le seuil de precision a 1500 est donc su
 
 DUKIN est donc le restaurant le plus populaire par nombre de restaurant.
 
-#### visualisation
+#### Visualisation
 
 Table des restaurant par nombre.
 ![alt text](image-32.png)
@@ -1866,39 +1609,66 @@ barchart des restaurants par nombre.
 On remarque la présence de DUNKIN et DUNKIN'. Il serait possible de refaire l’index afin de supprimer les caractères spéciaux, mais cela risquerait également d’agréger des restaurants différents.
 Nous estimons donc que notre degré de précision actuel est suffisant.
 
-## Dashboard
+## 3 Dashboard avec controles
 
-Visualisez le dashboard regroupant les visualisation ici :
+Visualisez le dashboard regroupant les visualisation ici avec les controles correspondant:
 
-http://localhost:5601/app/r/s/6ns45
+
+* Cuisine type
+* Neighborhood
+* Rank
+
+Disponible via la piece jointe ```dashboard.ndjson```
 
 ![alt text](image-41.png)
 ![alt text](image-42.png)
 ![alt text](image-43.png)
 
-## Visualisation with MAP
+### 3.2 Visualisation with MAP
 
-### Nombre d'inspection par zipcode en fonction du type de cuisine.
+#### Nombre d'inspection par zipcode en fonction du type de cuisine.
 
 ![alt text](image-39.png)
 
-### Cluster des inspection par quartier.
+On s’aperçoit que beaucoup de restaurants caribéens sont inspectés dans les zones situées au sud de New York, même s’il ne s’agit pas de la cuisine la plus populaire.
+
+#### Cluster des inspection par quartier.
 
 ![alt text](image-35.png)
 
-### Carte du nombre de restaurant par quartier.
+Les inspections sont bien proportionnelles au nombre de restaurants. On remarque que Manhattan, en vert, a subi le plus grand nombre d’inspections (selon le nombre de documents).
+
+#### Carte du nombre de restaurant par zipcode.
 
 ![alt text](image-40.png)
 
+En utilisant une jointure avec les données géographiques de Kibana sur les codes postaux, on peut obtenir une carte découpée selon ces derniers. Il est ensuite possible d’ajouter une couleur basée sur le BORO et une étiquette indiquant le nombre unique de restaurants par code postal.
 
-### Heatmap des restaurant.
+#### Heatmap des restaurant.
 
 ![alt text](image-36.png)
 
-### repartition des restaurants en clusters.
+On s’aperçoit facilement de la forte densité de restaurants dans le sud de Manhattan grâce à une heatmap de la region agreggant sur le numero unique de restaurant (CAMIS).
+
+#### repartition des restaurants en clusters.
 
 ![alt text](image-37.png)
 
-### Restaurant à la note de A par zipcode
+Je n’ai pas trouvé de moyen d’obtenir une carte en clusters à la fois colorée par quartier **BORO** et agrégée selon le nombre de restaurants. En revanche, il est possible d’observer le nombre de restaurants grâce à une carte en clusters agrégée par id de restaurant **CAMIS**.
+
+#### Restaurant à la note de A par zipcode
 
 ![alt text](image-38.png)
+
+Cette carte montre une fois de plus la forte densité de restaurants dans le sud de Manhattan, même lorsque l’on sélectionne uniquement ceux ayant obtenu la note A. Pour plus de précision, on utilisera le tableau de bord dynamique afin de choisir un intervalle de temps récent, ce qui permet d’éviter d’inclure des restaurants ayant eu la note A par le passé mais ne l’ayant plus actuellement.
+
+
+## Conclusion
+
+L’exploration de ce dataset nous a permis de constater la puissance d’Elasticsearch sous Kibana, qui propose des visualisations claires et faciles à prendre en main.
+
+Nous avons rapidement remarqué que New York est dominée par la cuisine américaine, avec Dunkin, Starbucks et Subway en tête. De plus, certaines violations, comme le non-respect des températures, sont très récurrentes. Manhattan reste à ce jour le quartier le plus dense et le plus peuplé en termes de restaurants.
+
+Ce projet illustre bien l’importance des outils de recherche et d’analyse comme Elasticsearch pour exploiter efficacement de grands volumes de données.
+
+La prochaine étape serait d’intégrer des données temporelles interactives ou un filtrage par période, afin de suivre l’évolution de la qualité sanitaire dans le temps.
