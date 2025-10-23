@@ -181,7 +181,7 @@ Response:
 
 Par cette visualisation on peut voir clairement tout les quartier de new york et les restautant present a l'interieur, divisé par zipcode.
 
-![alt text](image-40.png)
+![alt text](report/image-40.png)
 
 ### 2.2 Which neighborhood has the most restaurants ?
 
@@ -245,12 +245,12 @@ Reprendre la visualisation précédente ne permet pas de visualisé clairement q
 Comme sur la heatmap, on remarque une plus grande densité à Manhattan, mais cela reste moins évident qu’avec un barchart.
 On utilise donc un unique count sur CAMIS afin de ne compter que les restaurants uniques.
 
-![alt text](image-25.png)
+![alt text](report/image-25.png)
 
 
 On peux appercevoir la repartition des restaurant de new york par BORO.
 
-![alt text](image-26.png)
+![alt text](report/image-26.png)
 
 ### 2.3 What does the violation code "04N" correspond to ?
 
@@ -295,7 +295,7 @@ Le code 04N correspond à la présence de mouches ou d’autres insectes dans le
 
 Voici la proportion des codes de violation présents dans les restaurants enregistrés.
 On observe que le code 10F est le plus fréquent, en incluant les lignes ne présentant pas de code.
-![Proportion des code de violation present dans les restanrant de new york](image-6.png)
+![Proportion des code de violation present dans les restanrant de new york](report/image-6.png)
 
 
 ### 2.4 Where are the restaurants (name, address, neighborhood) that have a grade of A?
@@ -562,10 +562,10 @@ reponse :
 
 L’outil de visualisation n’autorise pas l’utilisation de DBA comme métrique. J’ai donc choisi de visualiser la proportion des notes parmi l’ensemble des restaurants. Les outils dynamiques du dashboard permettront ensuite d’ajuster la granularité.
 
-![alt text](image-30.png)
+![alt text](report/image-30.png)
 
 On peut également ajouter la médiane des scores par BORO. On découvre alors que le Queens présente la meilleure médiane parmi tous les BORO.
-![alt text](image-9.png)
+![alt text](report/image-9.png)
 
 ### 2.5 What is the most popular cuisine? And by neighborhood?
 
@@ -771,13 +771,13 @@ par BORO, la cuisine la plus populaire est
 
 Pour New York, on peut utiliser un pie chart classique ou un waffle chart (dont la visibilité reste toutefois moins bonne).
 
-![alt text](image-29.png)
+![alt text](report/image-29.png)
 
 On peut utiliser un double pie chart ou une mosaïque afin de visualiser la cuisine la plus populaire par BORO.
 
-![alt text](image-28.png)
+![alt text](report/image-28.png)
 
-![alt text](image-27.png)
+![alt text](report/image-27.png)
 ### 2.6 What is the date of the last inspection?
 
 ```json
@@ -815,7 +815,7 @@ La dernière inspection date du 10/09/2025 et concerne le restaurant LE PETIT MO
 
 On peut utiliser un diagramme temporel en barres ou en lignes pour visualiser l’évolution du nombre d’inspections au fil du temps.
 
-![alt text](image-14.png)
+![alt text](report/image-14.png)
 
 
 ### 2.7 Provide a list of Chinese restaurants with an A grade in Brooklyn.
@@ -999,13 +999,13 @@ resultat:
 
 On peut utiliser les contrôles afin d’obtenir une liste des restaurants correspondant à ces critères.
 
-![alt text](image-44.png)
+![alt text](report/image-44.png)
 
 ### 2.8 Provide the address of the restaurant LADUREE
 
 En effectuant une requête match, on découvre qu’il existe plusieurs restaurants LADURÉE (LADURÉE, LADURÉE Soho et LADURÉE).
 
-![alt text](image-16.png)
+![alt text](report/image-16.png)
 
 On essaie une requête pour obtenir le terme exact "LADURÉE", mais cela ne fonctionne toujours pas, comme si DBA ne permettait pas une recherche exacte. En inspectant le mapping, on s’aperçoit que DBA ne possède pas l’option "keyword", nécessaire pour ce type de recherche (contrairement à GRADE, par exemple). On ajoute donc un champ keyword à DBA dans un nouvel index.
 
@@ -1202,7 +1202,7 @@ PUT restaurantny_v1
 ```
 On peut finalement visualiser la localisation du restaurant LADURÉE.
 
-![alt text](image-19.png)
+![alt text](report/image-19.png)
 
 Cette méthode peut provoquer des erreurs de typage en raison d’une mauvaise spécification de tous les types ; par exemple, lors du réindexage, plusieurs champs de type keyword se sont transformés en champs text avec un attribut keyword.
 
@@ -1298,7 +1298,7 @@ La cuisine la plus affecté par cette violation sont les pizzerias.
 #### Visualisation
 
 Pie Chart avec un filtre.
-![alt text](image-20.png)
+![alt text](report/image-20.png)
 
 
 ### 2.10 Determine the most common violations (Top 5)
@@ -1466,7 +1466,7 @@ le top 5 des violations :
 
 #### Visualisation
 
-![alt text](image-21.png)
+![alt text](report/image-21.png)
 
 ### 2.11 Identify the most popular restaurant chain
 
@@ -1483,7 +1483,7 @@ Exécuter la requête en batch (manuellement ou via un script) afin d’obtenir 
 Pour le projet, j’ai choisi de réduire le seuil de précision de la cardinalité de 3000 à 1000. En effet, la cardinalité dans Elasticsearch repose sur l’algorithme HyperLogLog++, qui effectue un comptage approximatif.
 On peut donc réduire la précision afin de gagner en puissance de calcul. (https://www.elastic.co/docs/reference/aggregations/search-aggregations-metrics-cardinality-aggregation)
 
-![alt text](image-22.png)
+![alt text](report/image-22.png)
 
 Pour verifier la pertinence du resultat, On verifie le nombre de document compté avec une aggregation classique
 
@@ -1601,10 +1601,10 @@ DUKIN est donc le restaurant le plus populaire par nombre de restaurant.
 #### Visualisation
 
 Table des restaurant par nombre.
-![alt text](image-32.png)
+![alt text](report/image-32.png)
 
 barchart des restaurants par nombre.
-![alt text](image-33.png)
+![alt text](report/image-33.png)
 
 On remarque la présence de DUNKIN et DUNKIN'. Il serait possible de refaire l’index afin de supprimer les caractères spéciaux, mais cela risquerait également d’agréger des restaurants différents.
 Nous estimons donc que notre degré de précision actuel est suffisant.
@@ -1620,45 +1620,45 @@ Visualisez le dashboard regroupant les visualisation ici avec les controles corr
 
 Disponible via la piece jointe ```dashboard.ndjson```
 
-![alt text](image-41.png)
-![alt text](image-42.png)
-![alt text](image-43.png)
+![alt text](report/image-41.png)
+![alt text](report/image-42.png)
+![alt text](report/image-43.png)
 
 ### 3.2 Visualisation with MAP
 
 #### Nombre d’inspections par code postal en fonction du type de cuisine
 
-![alt text](image-39.png)
+![alt text](report/image-39.png)
 
 On s’aperçoit que beaucoup de restaurants caribéens sont inspectés dans les zones situées au sud de New York, même s’il ne s’agit pas de la cuisine la plus populaire.
 
 #### Clusters des inspections par quartier
 
-![alt text](image-35.png)
+![alt text](report/image-35.png)
 
 Les inspections sont bien proportionnelles au nombre de restaurants. On remarque que Manhattan, en vert, a subi le plus grand nombre d’inspections (selon le nombre de documents).
 
 #### Carte du nombre de restaurants par code postal
 
-![alt text](image-40.png)
+![alt text](report/image-40.png)
 
 En utilisant une jointure avec les données géographiques de Kibana sur les codes postaux, on peut obtenir une carte découpée selon ces derniers. Il est ensuite possible d’ajouter une couleur basée sur le BORO et une étiquette indiquant le nombre unique de restaurants par code postal.
 
 #### Heatmap des restaurants
 
-![alt text](image-36.png)
+![alt text](report/image-36.png)
 
 On s’aperçoit facilement de la forte densité de restaurants dans le sud de Manhattan grâce à une heatmap de la region agreggant sur le numero unique de restaurant (CAMIS).
 
 #### Répartition des restaurants en clusters
 
-![alt text](image-37.png)
+![alt text](report/image-37.png)
 
 Je n’ai pas trouvé de moyen d’obtenir une carte en clusters à la fois colorée par quartier **BORO** et agrégée selon le nombre de restaurants. En revanche, il est possible d’observer le nombre de restaurants grâce à une carte en clusters agrégée par id de restaurant **CAMIS**.
 
 #### Restaurants ayant la note A par code postal
 
-![alt text](image-38.png)
+![alt text](report/image-38.png)
 
 Cette carte montre une fois de plus la forte densité de restaurants dans le sud de Manhattan, même lorsque l’on sélectionne uniquement ceux ayant obtenu la note A. Pour plus de précision, on utilisera le tableau de bord dynamique afin de choisir un intervalle de temps récent, ce qui permet d’éviter d’inclure des restaurants ayant eu la note A par le passé mais ne l’ayant plus actuellement.
 
