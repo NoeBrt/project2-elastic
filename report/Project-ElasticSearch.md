@@ -38,12 +38,12 @@ Durant ce projet, nous avons tenté d’explorer les capacités et les éventuel
       - [Visualisation](#visualisation-10)
   - [3 Dashboard avec controles](#3-dashboard-avec-controles)
     - [3.2 Visualisation with MAP](#32-visualisation-with-map)
-      - [Nombre d'inspection par zipcode en fonction du type de cuisine.](#nombre-dinspection-par-zipcode-en-fonction-du-type-de-cuisine)
-      - [Cluster des inspection par quartier.](#cluster-des-inspection-par-quartier)
-      - [Carte du nombre de restaurant par zipcode.](#carte-du-nombre-de-restaurant-par-zipcode)
-      - [Heatmap des restaurant.](#heatmap-des-restaurant)
-      - [repartition des restaurants en clusters.](#repartition-des-restaurants-en-clusters)
-      - [Restaurant à la note de A par zipcode](#restaurant-à-la-note-de-a-par-zipcode)
+      - [Nombre d’inspections par code postal en fonction du type de cuisine](#nombre-dinspections-par-code-postal-en-fonction-du-type-de-cuisine)
+      - [Clusters des inspections par quartier](#clusters-des-inspections-par-quartier)
+      - [Carte du nombre de restaurants par code postal](#carte-du-nombre-de-restaurants-par-code-postal)
+      - [Heatmap des restaurants](#heatmap-des-restaurants)
+      - [Répartition des restaurants en clusters](#répartition-des-restaurants-en-clusters)
+      - [Restaurants ayant la note A par code postal](#restaurants-ayant-la-note-a-par-code-postal)
   - [Conclusion](#conclusion)
 
 ## Setup
@@ -1626,37 +1626,37 @@ Disponible via la piece jointe ```dashboard.ndjson```
 
 ### 3.2 Visualisation with MAP
 
-#### Nombre d'inspection par zipcode en fonction du type de cuisine.
+#### Nombre d’inspections par code postal en fonction du type de cuisine
 
 ![alt text](image-39.png)
 
 On s’aperçoit que beaucoup de restaurants caribéens sont inspectés dans les zones situées au sud de New York, même s’il ne s’agit pas de la cuisine la plus populaire.
 
-#### Cluster des inspection par quartier.
+#### Clusters des inspections par quartier
 
 ![alt text](image-35.png)
 
 Les inspections sont bien proportionnelles au nombre de restaurants. On remarque que Manhattan, en vert, a subi le plus grand nombre d’inspections (selon le nombre de documents).
 
-#### Carte du nombre de restaurant par zipcode.
+#### Carte du nombre de restaurants par code postal
 
 ![alt text](image-40.png)
 
 En utilisant une jointure avec les données géographiques de Kibana sur les codes postaux, on peut obtenir une carte découpée selon ces derniers. Il est ensuite possible d’ajouter une couleur basée sur le BORO et une étiquette indiquant le nombre unique de restaurants par code postal.
 
-#### Heatmap des restaurant.
+#### Heatmap des restaurants
 
 ![alt text](image-36.png)
 
 On s’aperçoit facilement de la forte densité de restaurants dans le sud de Manhattan grâce à une heatmap de la region agreggant sur le numero unique de restaurant (CAMIS).
 
-#### repartition des restaurants en clusters.
+#### Répartition des restaurants en clusters
 
 ![alt text](image-37.png)
 
 Je n’ai pas trouvé de moyen d’obtenir une carte en clusters à la fois colorée par quartier **BORO** et agrégée selon le nombre de restaurants. En revanche, il est possible d’observer le nombre de restaurants grâce à une carte en clusters agrégée par id de restaurant **CAMIS**.
 
-#### Restaurant à la note de A par zipcode
+#### Restaurants ayant la note A par code postal
 
 ![alt text](image-38.png)
 
